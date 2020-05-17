@@ -30,6 +30,7 @@ class App extends Component {
     const filteredFriends = friends.filter(friend => friend.name.toLowerCase().includes(searchString.toLowerCase()));
     return (
       <div className="App">
+      <h1>My Friends</h1>
         <SearchBox placeholder='search friends' handleChange={this.handleChange}></SearchBox>
         <CardList friends={filteredFriends}></CardList>
       </div>
