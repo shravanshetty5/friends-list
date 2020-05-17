@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { CardList } from './components/card-list/card-list.component';
+import { SearchBox } from './components/search-box/search-box.component';
 
 class App extends Component {
   isKannada = false;
@@ -10,6 +11,7 @@ class App extends Component {
 
     this.state = {
       friends: [],
+      searchString: ''
     };
   }
   componentDidMount() {
@@ -19,10 +21,17 @@ class App extends Component {
         friends: users
       }))
   }
+
+  handleChange = (event) => {
+    this.setState({searchString: event.target.value})
+  }
   render () {
+    const { friends, searchString } = this.state;
+    const filteredFriends = friends.filter(friend => friend.name.toLowerCase().includes(searchString.toLowerCase()));
     return (
       <div className="App">
-        <CardList friends={this.state.friends}></CardList>
+        <SearchBox placeholder='search friends' handleChange={this.handleChange}></SearchBox>
+        <CardList friends={filteredFriends}></CardList>
       </div>
     );
   }
