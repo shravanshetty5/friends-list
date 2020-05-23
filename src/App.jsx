@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import { CardList } from './components/card-list/card-list.component';
+import { Scroll } from './components/scroll/scroll.component';
 import { SearchBox } from './components/search-box/search-box.component';
-
 class App extends Component {
   isKannada = false;
 
@@ -32,7 +32,9 @@ class App extends Component {
       <div className="App">
       <h1>My Friends</h1>
         <SearchBox placeholder='search friends' handleChange={this.handleChange}></SearchBox>
-        <CardList friends={filteredFriends}></CardList>
+        <Scroll>
+          <CardList friends={filteredFriends}></CardList>
+        </Scroll>
       </div>
     );
   }
