@@ -1,13 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
-import { searchFriends } from './+state/reducer';
+import { applyMiddleware, combineReducers, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
+import thunk from 'redux-thunk';
+import { requestFriends, searchFriends } from './+state/reducer';
 import App from './App';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
 
-const store = createStore(searchFriends);
+const rootReducer = combineReducers({ searchFriends, requestFriends });
+const store = createStore(
+  rootReducer,
+  composeWithDevTools(applyMiddleware(thunk))
+);
 
 ReactDOM.render(
   <React.StrictMode>

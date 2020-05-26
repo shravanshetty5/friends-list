@@ -1,57 +1,50 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { setSearchField } from './+state/actions';
+import { requestRobots, setSearchField } from './+state/actions';
 import './App.css';
 import { CardList } from './components/card-list/card-list.component';
 import { ErrorBoundry } from './components/ErrorBoundry/error-boundry.component';
 import { Scroll } from './components/scroll/scroll.component';
 import { SearchBox } from './components/search-box/search-box.component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    searchField: state.searchField
-  }
-}
+    searchField: state.searchFriends.searchField,
+    friends: state.requestFriends.friends,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSearchChange: (event) => dispatch(setSearchField(event.target.value))
-  }
-}
+    onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
+    requestFriends: () => dispatch(requestRobots()),
+  };
+};
 class App extends Component {
-
-  constructor() {
-    super();
-
-    this.state = {
-      friends: []
-    };
-  }
   componentDidMount() {
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then((resp) => resp.json())
-      .then(users => this.setState({
-        friends: users
-      }))
+    this.props.requestFriends();
   }
 
-  render () {
-    const { friends } = this.state;
-    const { searchField, onSearchChange } = this.props;
-    const filteredFriends = friends.filter(friend => friend.name.toLowerCase().includes(searchField.toLowerCase()));
+  render() {
+    const { searchField, onSearchChange, friends } = this.props;
+    const filteredFriends = friends.filter((friend) =>
+      friend.name.toLowerCase().includes(searchField.toLowerCase())
+    );
     return (
-      <div className="App">
-      <h1>My Friends</h1>
-        <SearchBox placeholder='search friends' handleChange={onSearchChange}></SearchBox>
+      <div className='App'>
+        <h1>My Friends</h1>
+        <SearchBox
+          placeholder='search friends'
+          handleChange={onSearchChange}
+        ></SearchBox>
         <Scroll>
-        <ErrorBoundry>
-          <CardList friends={filteredFriends}></CardList>
-        </ErrorBoundry>
+          <ErrorBoundry>
+            <CardList friends={filteredFriends}></CardList>
+          </ErrorBoundry>
         </Scroll>
       </div>
     );
   }
-  
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
